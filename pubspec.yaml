@@ -1,0 +1,47 @@
+name: guess_the_picture
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.2+3
+
+environment:
+  sdk: ^3.10.7
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  http: ^1.2.1
+  shared_preferences: ^2.2.3
+  cached_network_image: ^3.3.1
+  firebase_core: ^4.5.0
+  firebase_app_check: ^0.4.0+1
+  firebase_storage: ^13.1.0
+  path_provider: ^2.1.5
+  google_mobile_ads: ^7.0.0
+  audioplayers: ^6.6.0
+  firebase_crashlytics: ^5.0.8
+  firebase_analytics: ^12.1.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_launcher_icons: ^0.14.4
+
+  flutter_lints: ^6.0.0
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/data/
+    - assets/sounds/
+    - assets/icon/
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: assets/icon/app_icon.png
+  remove_alpha_ios: true

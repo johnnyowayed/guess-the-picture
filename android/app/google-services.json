@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "604021647563",
+    "project_id": "guess-the-picture-app-42cad",
+    "storage_bucket": "guess-the-picture-app-42cad.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:604021647563:android:b86d466561388208d6534e",
+        "android_client_info": {
+          "package_name": "com.johnnyowayed.picturepuzzle"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRMS_4Xf-BSKkxnllAZcbCY_15MhJzEhc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
