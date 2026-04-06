@@ -20,7 +20,8 @@ class GameScreen extends StatefulWidget {
   State<GameScreen> createState() => _GameScreenState();
 }
 
-class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateMixin {
+class _GameScreenState extends State<GameScreen>
+    with SingleTickerProviderStateMixin {
   final LevelService _levelService = LevelService();
   final ProgressService _progressService = ProgressService();
   final Random _random = Random();
@@ -170,8 +171,10 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
     return shuffled.join(' ');
   }
 
-  String get _currentGuess =>
-      _answerSlots.whereType<_SelectedLetter>().map((slot) => slot.letter).join();
+  String get _currentGuess => _answerSlots
+      .whereType<_SelectedLetter>()
+      .map((slot) => slot.letter)
+      .join();
 
   bool get _isAnswerComplete => _answerSlots.every((slot) => slot != null);
 
@@ -191,7 +194,8 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
       _currentLevel?.id == 3;
 
   _LetterTileData? get _guidedTutorialTile {
-    if ((!_isGuidedImageSolveStep && !_isGuidedScrambleSolveStep) || _currentLevel == null) {
+    if ((!_isGuidedImageSolveStep && !_isGuidedScrambleSolveStep) ||
+        _currentLevel == null) {
       return null;
     }
 
@@ -223,7 +227,10 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
     unawaited(FeedbackService.instance.tap());
 
     setState(() {
-      _answerSlots[emptyIndex] = _SelectedLetter(tileId: tile.id, letter: tile.letter);
+      _answerSlots[emptyIndex] = _SelectedLetter(
+        tileId: tile.id,
+        letter: tile.letter,
+      );
       tile.isUsed = true;
       _message = null;
       _lastAnswerCorrect = null;
@@ -246,7 +253,9 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
 
     unawaited(FeedbackService.instance.tap());
 
-    final tileIndex = _letterTiles.indexWhere((tile) => tile.id == selected.tileId);
+    final tileIndex = _letterTiles.indexWhere(
+      (tile) => tile.id == selected.tileId,
+    );
 
     setState(() {
       _answerSlots[index] = null;
@@ -272,13 +281,19 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
 
     final answerCounts = <String, int>{};
     for (final letter in _currentAnswer.split('')) {
-      answerCounts.update(letter.toUpperCase(), (count) => count + 1, ifAbsent: () => 1);
+      answerCounts.update(
+        letter.toUpperCase(),
+        (count) => count + 1,
+        ifAbsent: () => 1,
+      );
     }
 
     final remainingAnswerCounts = Map<String, int>.from(answerCounts);
     final removableTiles = <_LetterTileData>[];
 
-    for (final tile in _letterTiles.where((tile) => !tile.isUsed && !tile.isRemoved)) {
+    for (final tile in _letterTiles.where(
+      (tile) => !tile.isUsed && !tile.isRemoved,
+    )) {
       final remaining = remainingAnswerCounts[tile.letter] ?? 0;
       if (remaining > 0) {
         remainingAnswerCounts[tile.letter] = remaining - 1;
@@ -395,7 +410,8 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
       _isChecking = true;
     });
 
-    final isCorrect = _normalizeAnswer(_currentGuess) == _normalizeAnswer(level.answer);
+    final isCorrect =
+        _normalizeAnswer(_currentGuess) == _normalizeAnswer(level.answer);
 
     if (isCorrect) {
       unawaited(
@@ -430,14 +446,14 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
     await Future<void>.delayed(const Duration(milliseconds: 700));
     if (!mounted) return;
 
-      setState(() {
-        _isChecking = false;
-        for (final tile in _letterTiles) {
-          tile.isUsed = false;
-          tile.isRemoved = false;
-        }
-        _answerSlots = List<_SelectedLetter?>.filled(_answerSlots.length, null);
-        _message = null;
+    setState(() {
+      _isChecking = false;
+      for (final tile in _letterTiles) {
+        tile.isUsed = false;
+        tile.isRemoved = false;
+      }
+      _answerSlots = List<_SelectedLetter?>.filled(_answerSlots.length, null);
+      _message = null;
       _lastAnswerCorrect = null;
     });
   }
@@ -445,7 +461,9 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
   Future<void> _goToNextLevel() async {
     if (_levels.isEmpty || _currentLevel == null) return;
 
-    final currentIndex = _levels.indexWhere((level) => level.id == _currentLevel!.id);
+    final currentIndex = _levels.indexWhere(
+      (level) => level.id == _currentLevel!.id,
+    );
     final hasNext = currentIndex >= 0 && currentIndex < _levels.length - 1;
 
     if (!hasNext) {
@@ -463,7 +481,8 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
     await _progressService.saveCurrentLevel(nextLevel.id);
     final shouldHoldForTutorial = await _shouldHoldForTutorial(nextLevel);
 
-    if (completedLevel % 5 == 0 && _lastInterstitialCheckpoint != completedLevel) {
+    if (completedLevel % 5 == 0 &&
+        _lastInterstitialCheckpoint != completedLevel) {
       _lastInterstitialCheckpoint = completedLevel;
       await AdService.instance.showInterstitialIfAvailable();
     }
@@ -528,7 +547,8 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
       final isTargetReady = await _waitForTargetRect(_scrambleCardKey);
       if (!mounted || _currentLevel?.id != level.id || !isTargetReady) return;
 
-      final hasSeenScrambleTutorial = await _progressService.hasSeenScrambleTutorial();
+      final hasSeenScrambleTutorial = await _progressService
+          .hasSeenScrambleTutorial();
       if (!mounted || _currentLevel?.id != level.id) return;
       if (hasSeenScrambleTutorial) {
         setState(() {
@@ -548,7 +568,9 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
 
     if (!_isImageReadyForTutorial) {
       await Future<void>.delayed(const Duration(milliseconds: 120));
-      if (!mounted || _currentLevel?.id != level.id || !_isImageReadyForTutorial) {
+      if (!mounted ||
+          _currentLevel?.id != level.id ||
+          !_isImageReadyForTutorial) {
         _scheduleTutorialCheck(level);
         return;
       }
@@ -580,7 +602,8 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
         return [
           _TutorialStep(
             title: 'Look at the picture',
-            body: 'This picture is your clue. Here it shows a fork being lifted by a person, which points you toward the answer.',
+            body:
+                'This picture is your clue. Here it shows a fork being lifted by a person, which points you toward the answer.',
             targetKey: _imageFocusKey,
             panelAlignment: Alignment.bottomCenter,
           ),
@@ -592,25 +615,29 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
           ),
           _TutorialStep(
             title: 'Use the letter tiles',
-            body: 'Pick letters from here. If you get stuck, the helper buttons can help.',
+            body:
+                'Pick letters from here. If you get stuck, the helper buttons can help.',
             targetKey: _lettersKey,
             panelAlignment: Alignment.center,
           ),
           _TutorialStep(
             title: 'Need help?',
-            body: 'Undo removes your last step, Simplify removes excluded letters to make the word easier to find, Reveal shows a random letter, and Hint displays a text clue to help with the solution.',
+            body:
+                'Undo removes your last step, Simplify removes excluded letters to make the word easier to find, Reveal shows a random letter, and Hint displays a text clue to help with the solution.',
             targetKey: _actionRowKey,
             panelAlignment: Alignment.bottomCenter,
           ),
           _TutorialStep(
             title: 'We will solve it together',
-            body: 'Now follow the glowing letter. I will guide you through the whole first word.',
+            body:
+                'Now follow the glowing letter. I will guide you through the whole first word.',
             targetKey: _answerRowKey,
             panelAlignment: Alignment.center,
           ),
           _TutorialStep(
             title: 'Your turn',
-            body: 'Tap the glowing letter to build the answer one step at a time.',
+            body:
+                'Tap the glowing letter to build the answer one step at a time.',
             targetKey: _lettersKey,
             panelAlignment: Alignment.topCenter,
           ),
@@ -619,31 +646,36 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
         return [
           _TutorialStep(
             title: 'Read the scrambled clue',
-            body: 'These mixed letters hint at the hidden word you need to solve.',
+            body:
+                'These mixed letters hint at the hidden word you need to solve.',
             targetKey: _scrambleCardKey,
             panelAlignment: Alignment.bottomCenter,
           ),
           _TutorialStep(
             title: 'Build the real word',
-            body: 'Use the answer slots to place the letters in the correct order.',
+            body:
+                'Use the answer slots to place the letters in the correct order.',
             targetKey: _answerRowKey,
             panelAlignment: Alignment.bottomCenter,
           ),
           _TutorialStep(
             title: 'Need help?',
-            body: 'Undo removes your last step, Reveal shows a random letter, and Hint displays a text clue to help with the solution.',
+            body:
+                'Undo removes your last step, Reveal shows a random letter, and Hint displays a text clue to help with the solution.',
             targetKey: _actionRowKey,
             panelAlignment: Alignment.bottomCenter,
           ),
           _TutorialStep(
             title: 'We will solve this one together',
-            body: 'Follow the glowing letter and we will finish the first scrambled word together.',
+            body:
+                'Follow the glowing letter and we will finish the first scrambled word together.',
             targetKey: _answerRowKey,
             panelAlignment: Alignment.center,
           ),
           _TutorialStep(
             title: 'Your turn',
-            body: 'Tap the glowing letter to build the scrambled answer one step at a time.',
+            body:
+                'Tap the glowing letter to build the scrambled answer one step at a time.',
             targetKey: _lettersKey,
             panelAlignment: Alignment.topCenter,
           ),
@@ -712,28 +744,16 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
     }
     if (highlightRect == null) return null;
     if (step.title == 'Look at the picture') {
-      return min(
-        highlightRect.bottom + 10,
-        screenHeight - 220,
-      );
+      return min(highlightRect.bottom + 10, screenHeight - 220);
     }
     if (step.title == 'Read the scrambled clue') {
-      return min(
-        highlightRect.bottom + 10,
-        screenHeight - 220,
-      );
+      return min(highlightRect.bottom + 10, screenHeight - 220);
     }
     if (step.title == 'Build the answer here') {
-      return min(
-        highlightRect.bottom + 16,
-        screenHeight - 220,
-      );
+      return min(highlightRect.bottom + 16, screenHeight - 220);
     }
     if (step.title == 'Build the real word') {
-      return min(
-        highlightRect.bottom + 10,
-        screenHeight - 220,
-      );
+      return min(highlightRect.bottom + 10, screenHeight - 220);
     }
     if (step.title == 'Use the letter tiles') {
       return max(24.0, highlightRect.top - 196);
@@ -747,7 +767,10 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
   double? _tutorialPanelBottom(_TutorialStep step, Rect? highlightRect) {
     if (highlightRect == null) return null;
     if (step.title == 'Need help?') {
-      return max(24.0, MediaQuery.of(context).size.height - highlightRect.top + 18);
+      return max(
+        24.0,
+        MediaQuery.of(context).size.height - highlightRect.top + 18,
+      );
     }
     return null;
   }
@@ -773,12 +796,15 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
     if (current == null) return;
 
     final targetLevel = _levels.firstWhere(
-      (level) => type == _TutorialType.image ? !level.isScramble : level.isScramble,
+      (level) =>
+          type == _TutorialType.image ? !level.isScramble : level.isScramble,
       orElse: () => current,
     );
 
     setState(() {
-      _tutorialReplayReturnLevelId = current.id == targetLevel.id ? null : current.id;
+      _tutorialReplayReturnLevelId = current.id == targetLevel.id
+          ? null
+          : current.id;
       _currentLevel = targetLevel;
       _currentLevelNumber = targetLevel.id;
       _prepareLevel(targetLevel);
@@ -921,16 +947,10 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
                   gradient: const LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [
-                      Color(0xFFFFF7E7),
-                      Color(0xFFFFE1B0),
-                    ],
+                    colors: [Color(0xFFFFF7E7), Color(0xFFFFE1B0)],
                   ),
                   borderRadius: BorderRadius.circular(30),
-                  border: Border.all(
-                    color: const Color(0xFFF0C97F),
-                    width: 2,
-                  ),
+                  border: Border.all(color: const Color(0xFFF0C97F), width: 2),
                   boxShadow: const [
                     BoxShadow(
                       color: Color(0x227A4A00),
@@ -976,7 +996,9 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
                       label: 'Vibration',
                       value: vibrationEnabled,
                       onChanged: (value) async {
-                        await FeedbackService.instance.setVibrationEnabled(value);
+                        await FeedbackService.instance.setVibrationEnabled(
+                          value,
+                        );
                         vibrationEnabled = value;
                         setModalState(() {});
                         if (value) {
@@ -1023,23 +1045,30 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     final level = _currentLevel;
-    final tutorialStep = _activeTutorial == null ? null : _tutorialSteps[_tutorialStepIndex];
+    final tutorialStep = _activeTutorial == null
+        ? null
+        : _tutorialSteps[_tutorialStepIndex];
     final tutorialRect = tutorialStep == null
         ? null
         : (_isGuidedImageSolveStep || _isGuidedScrambleSolveStep)
-            ? _rectForKey(_guidedTutorialTile?.key ?? tutorialStep.targetKey)
-            : _rectForKey(tutorialStep.targetKey);
-    final tutorialTitle = (_isGuidedImageSolveStep || _isGuidedScrambleSolveStep)
+        ? _rectForKey(_guidedTutorialTile?.key ?? tutorialStep.targetKey)
+        : _rectForKey(tutorialStep.targetKey);
+    final tutorialTitle =
+        (_isGuidedImageSolveStep || _isGuidedScrambleSolveStep)
         ? 'Tap "${_guidedTutorialTile?.letter ?? ''}"'
         : tutorialStep?.title ?? '';
     final tutorialBody = (_isGuidedImageSolveStep || _isGuidedScrambleSolveStep)
         ? 'Press the glowing letter tile, then keep following the highlight until the word is complete.'
         : tutorialStep?.body ?? '';
     final shouldShowTutorialOverlay =
-        tutorialStep != null && !_isGuidedImageSolveStep && !_isGuidedScrambleSolveStep;
+        tutorialStep != null &&
+        !_isGuidedImageSolveStep &&
+        !_isGuidedScrambleSolveStep;
 
     return Scaffold(
-      bottomNavigationBar: _activeTutorial == null && !_isTutorialPending ? const AppBannerAd() : null,
+      bottomNavigationBar: _activeTutorial == null && !_isTutorialPending
+          ? const AppBannerAd()
+          : null,
       body: Stack(
         key: _overlayKey,
         children: [
@@ -1059,98 +1088,129 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
               child: _isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : level == null
-                      ? Center(
-                          child: Text(
-                            _message != null
-                                ? 'Failed to load levels: $_message'
-                                : 'No levels available',
-                          ),
-                        )
-                      : LayoutBuilder(
-                          builder: (context, constraints) {
-                            final width = constraints.maxWidth;
-                            final answerLength = _answerSlots.length;
-                            final wordSpacing = width < 380 ? 7.0 : 10.0;
-                            final wordSize = min(
-                              width < 380 ? 28.0 : 32.0,
-                              (width - 48 - (answerLength - 1) * wordSpacing) / answerLength,
-                            );
-                            final tileSpacing = width < 380 ? 6.0 : 8.0;
-                            final tileSize = width < 380 ? 40.0 : 44.0;
+                  ? Center(
+                      child: Text(
+                        _message != null
+                            ? 'Failed to load levels: $_message'
+                            : 'No levels available',
+                      ),
+                    )
+                  : LayoutBuilder(
+                      builder: (context, constraints) {
+                        final width = constraints.maxWidth;
+                        final answerLength = _answerSlots.length;
+                        final wordSpacing = width < 380 ? 7.0 : 10.0;
+                        final wordSize = min(
+                          width < 380 ? 28.0 : 32.0,
+                          (width - 48 - (answerLength - 1) * wordSpacing) /
+                              answerLength,
+                        );
+                        final tileSpacing = width < 380 ? 6.0 : 8.0;
+                        final tileSize = width < 380 ? 40.0 : 44.0;
 
-                            return Opacity(
-                              opacity: _isTutorialPending && _activeTutorial == null ? 0 : 1,
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
-                                child: Column(
-                                  children: [
-                                    _buildTopBar(),
-                                    const SizedBox(height: 12),
-                                    Expanded(
-                                      child: Column(
-                                        children: [
-                                          Expanded(
-                                            flex: 10,
-                                            child: Center(
-                                              child: _isScrambleChallengeLevel
-                                                  ? _buildScrambleChallengeCard(width)
-                                                  : _buildImageCard(level, width),
-                                            ),
-                                          ),
-                                          if (_revealedHint != null) ...[
-                                            const SizedBox(height: 10),
-                                            Text(
-                                              'Hint: $_revealedHint',
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                color: Color(0xFF6B491E),
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w800,
-                                              ),
-                                            ),
-                                          ],
-                                          const SizedBox(height: 16),
-                                          SizedBox(
-                                            key: _answerRowKey,
-                                            height: wordSize + 10,
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                for (var i = 0; i < _answerSlots.length; i++) ...[
-                                                  _buildAnswerSlot(i, wordSize),
-                                                  if (i != _answerSlots.length - 1)
-                                                    SizedBox(width: wordSpacing),
-                                                ],
-                                              ],
-                                            ),
-                                          ),
-                                          const SizedBox(height: 8),
-                                          _buildActionRow(),
-                                          const SizedBox(height: 14),
-                                          Expanded(
-                                            flex: 6,
-                                            child: Align(
-                                              alignment: Alignment.topCenter,
-                                              child: Wrap(
-                                                key: _lettersKey,
-                                                alignment: WrapAlignment.center,
-                                                spacing: tileSpacing,
-                                                runSpacing: tileSpacing,
-                                                children: _letterTiles
-                                                    .map((tile) => _buildLetterTile(tile, tileSize))
-                                                    .toList(),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                        return Opacity(
+                          opacity: _isTutorialPending && _activeTutorial == null
+                              ? 0
+                              : 1,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 10, 16, 4),
+                            child: Column(
+                              children: [
+                                _buildTopBar(),
+                                const SizedBox(height: 12),
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        flex: 10,
+                                        child: Center(
+                                          child: _isScrambleChallengeLevel
+                                              ? _buildScrambleChallengeCard(
+                                                  width,
+                                                )
+                                              : _buildImageCard(level, width),
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                      if (_revealedHint != null) ...[
+                                        const SizedBox(height: 10),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 14,
+                                            vertical: 8,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(
+                                              999,
+                                            ),
+                                            border: Border.all(
+                                              color: const Color(0xFF6B491E),
+                                              width: 1.4,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            'Hint: $_revealedHint',
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                              color: Color(0xFF6B491E),
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w800,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                      const SizedBox(height: 16),
+                                      SizedBox(
+                                        key: _answerRowKey,
+                                        height: wordSize + 10,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            for (
+                                              var i = 0;
+                                              i < _answerSlots.length;
+                                              i++
+                                            ) ...[
+                                              _buildAnswerSlot(i, wordSize),
+                                              if (i != _answerSlots.length - 1)
+                                                SizedBox(width: wordSpacing),
+                                            ],
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      _buildActionRow(),
+                                      const SizedBox(height: 14),
+                                      Expanded(
+                                        flex: 6,
+                                        child: Align(
+                                          alignment: Alignment.topCenter,
+                                          child: Wrap(
+                                            key: _lettersKey,
+                                            alignment: WrapAlignment.center,
+                                            spacing: tileSpacing,
+                                            runSpacing: tileSpacing,
+                                            children: _letterTiles
+                                                .map(
+                                                  (tile) => _buildLetterTile(
+                                                    tile,
+                                                    tileSize,
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                        ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
             ),
           ),
           if (shouldShowTutorialOverlay)
@@ -1170,7 +1230,10 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
                   style: TextButton.styleFrom(
                     foregroundColor: const Color(0xFF5A3B14),
                     backgroundColor: const Color(0xFFFDF4E2),
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 10,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(999),
                       side: const BorderSide(
@@ -1182,9 +1245,7 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
                   icon: const Icon(Icons.close_rounded, size: 18),
                   label: const Text(
                     'Exit Tutorial',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.w800),
                   ),
                 ),
               ),
@@ -1219,9 +1280,7 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
                 Icons.settings_rounded,
                 color: Color(0xFF5A3B14),
               ),
-              style: IconButton.styleFrom(
-                backgroundColor: Colors.white24,
-              ),
+              style: IconButton.styleFrom(backgroundColor: Colors.white24),
             ),
           ),
         ),
@@ -1232,9 +1291,7 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
   Widget _buildImageCard(LevelModel level, double width) {
     return ConstrainedBox(
       key: _imageCardKey,
-      constraints: BoxConstraints(
-        maxWidth: min(width - 24, 320),
-      ),
+      constraints: BoxConstraints(maxWidth: min(width - 24, 320)),
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
@@ -1251,10 +1308,7 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(22),
-            border: Border.all(
-              color: const Color(0xFFF0D39A),
-              width: 2,
-            ),
+            border: Border.all(color: const Color(0xFFF0D39A), width: 2),
           ),
           child: Padding(
             padding: const EdgeInsets.all(2),
@@ -1275,9 +1329,7 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
   Widget _buildScrambleChallengeCard(double width) {
     return ConstrainedBox(
       key: _scrambleCardKey,
-      constraints: BoxConstraints(
-        maxWidth: min(width - 24, 320),
-      ),
+      constraints: BoxConstraints(maxWidth: min(width - 24, 320)),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 26),
         decoration: BoxDecoration(
@@ -1296,17 +1348,11 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 24),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(22),
-            border: Border.all(
-              color: const Color(0xFFF0D39A),
-              width: 2,
-            ),
+            border: Border.all(color: const Color(0xFFF0D39A), width: 2),
             gradient: const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                Color(0xFFFFF8E8),
-                Color(0xFFFFE4B5),
-              ],
+              colors: [Color(0xFFFFF8E8), Color(0xFFFFE4B5)],
             ),
           ),
           child: Column(
@@ -1357,8 +1403,8 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
     final background = _lastAnswerCorrect == true
         ? const Color(0xFFCBEED7)
         : _lastAnswerCorrect == false
-            ? const Color(0xFFF5C0B4)
-            : const Color(0xFFFFF9EE);
+        ? const Color(0xFFF5C0B4)
+        : const Color(0xFFFFF9EE);
 
     return GestureDetector(
       onTap: () => _removeLetterAt(index),
@@ -1370,7 +1416,9 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
           color: background,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: selected == null ? const Color(0xFFE6C88E) : const Color(0xFF916126),
+            color: selected == null
+                ? const Color(0xFFE6C88E)
+                : const Color(0xFF916126),
             width: 1.8,
           ),
         ),
@@ -1422,10 +1470,8 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
         ),
         const SizedBox(width: 10),
         _buildActionButton(
-          onPressed: () => _useRewardedAction(
-            onRewarded: _showHint,
-            actionName: 'Hint',
-          ),
+          onPressed: () =>
+              _useRewardedAction(onRewarded: _showHint, actionName: 'Hint'),
           icon: Icons.lightbulb_outline_rounded,
           label: 'Hint',
           showsAdBadge: true,
@@ -1506,17 +1552,15 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
     final highlightRect = _tutorialHighlightRect(step, rect);
     final panelTop = _tutorialPanelTop(step, highlightRect);
     final panelBottom = _tutorialPanelBottom(step, highlightRect);
-    final panelAlignment =
-        panelBottom != null && panelTop == null ? Alignment.bottomCenter : Alignment.topCenter;
+    final panelAlignment = panelBottom != null && panelTop == null
+        ? Alignment.bottomCenter
+        : Alignment.topCenter;
 
     return Positioned.fill(
       child: Stack(
         children: [
           const Positioned.fill(
-            child: ModalBarrier(
-              dismissible: false,
-              color: Colors.transparent,
-            ),
+            child: ModalBarrier(dismissible: false, color: Colors.transparent),
           ),
           IgnorePointer(
             child: CustomPaint(
@@ -1611,13 +1655,14 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
                           width: double.infinity,
                           child: FilledButton(
                             onPressed: _advanceTutorial,
-                            child: Text(
-                              switch (step.title) {
-                                'We will solve it together' => 'Let’s Solve',
-                                _ when _tutorialStepIndex == _tutorialSteps.length - 1 => 'Let’s Go',
-                                _ => 'Got It',
-                              },
-                            ),
+                            child: Text(switch (step.title) {
+                              'We will solve it together' => 'Let’s Solve',
+                              _
+                                  when _tutorialStepIndex ==
+                                      _tutorialSteps.length - 1 =>
+                                'Let’s Go',
+                              _ => 'Got It',
+                            }),
                           ),
                         ),
                       ],
@@ -1643,10 +1688,7 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.68),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: const Color(0xFFF0D39A),
-          width: 1.6,
-        ),
+        border: Border.all(color: const Color(0xFFF0D39A), width: 1.6),
       ),
       child: Row(
         children: [
@@ -1702,8 +1744,8 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
       opacity: tile.isUsed || tile.isRemoved
           ? 0.18
           : (isGuidedStep && !isGuidedTarget)
-              ? 0.26
-              : 1,
+          ? 0.26
+          : 1,
       child: SizedBox(
         width: size,
         height: size,
@@ -1716,7 +1758,12 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
                 boxShadow: isGuidedTarget
                     ? [
                         BoxShadow(
-                          color: Color.fromRGBO(255, 211, 109, highlightOpacity),
+                          color: Color.fromRGBO(
+                            255,
+                            211,
+                            109,
+                            highlightOpacity,
+                          ),
                           blurRadius: 18,
                           spreadRadius: 1.5,
                         ),
@@ -1728,21 +1775,23 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
           },
           child: FilledButton(
             key: tile.key,
-            onPressed: tile.isUsed || tile.isRemoved || (isGuidedStep && !isGuidedTarget)
+            onPressed:
+                tile.isUsed ||
+                    tile.isRemoved ||
+                    (isGuidedStep && !isGuidedTarget)
                 ? null
                 : () => _selectLetter(tile),
             style: FilledButton.styleFrom(
               padding: EdgeInsets.zero,
-              backgroundColor: isGuidedTarget ? const Color(0xFFB66A17) : const Color(0xFF7C4D17),
+              backgroundColor: isGuidedTarget
+                  ? const Color(0xFFB66A17)
+                  : const Color(0xFF7C4D17),
               disabledBackgroundColor: const Color(0xFFE0C99E),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(14),
               ),
               side: isGuidedTarget
-                  ? const BorderSide(
-                      color: Color(0xFFFFD36D),
-                      width: 2.4,
-                    )
+                  ? const BorderSide(color: Color(0xFFFFD36D), width: 2.4)
                   : null,
               elevation: isGuidedTarget ? 8 : null,
               shadowColor: const Color(0x66FFD36D),
@@ -1762,10 +1811,7 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
 }
 
 class _LetterTileData {
-  _LetterTileData({
-    required this.id,
-    required this.letter,
-  }) : key = GlobalKey();
+  _LetterTileData({required this.id, required this.letter}) : key = GlobalKey();
 
   final String id;
   final String letter;
@@ -1775,19 +1821,13 @@ class _LetterTileData {
 }
 
 class _SelectedLetter {
-  const _SelectedLetter({
-    required this.tileId,
-    required this.letter,
-  });
+  const _SelectedLetter({required this.tileId, required this.letter});
 
   final String tileId;
   final String letter;
 }
 
-enum _TutorialType {
-  image,
-  scramble,
-}
+enum _TutorialType { image, scramble }
 
 class _TutorialStep {
   const _TutorialStep({
@@ -1816,18 +1856,11 @@ class _TutorialOverlayPainter extends CustomPainter {
 
     if (highlightRect != null) {
       cutoutPath.addRRect(
-        RRect.fromRectAndRadius(
-          highlightRect!,
-          const Radius.circular(28),
-        ),
+        RRect.fromRectAndRadius(highlightRect!, const Radius.circular(28)),
       );
     }
 
-    final path = Path.combine(
-      PathOperation.difference,
-      fullPath,
-      cutoutPath,
-    );
+    final path = Path.combine(PathOperation.difference, fullPath, cutoutPath);
 
     canvas.drawPath(path, overlayPaint);
   }
