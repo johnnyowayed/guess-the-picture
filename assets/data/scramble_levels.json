@@ -1,52 +1,678 @@
 [
-  { "answer": "elephant", "hint": "Animal" },
-  { "answer": "avocado", "hint": "Fruit" },
-  { "answer": "diamond", "hint": "Gem" },
-  { "answer": "library", "hint": "Place" },
-  { "answer": "volcano", "hint": "Nature" },
-  { "answer": "airplane", "hint": "Transport" },
-  { "answer": "treasure", "hint": "Adventure" },
-  { "answer": "calendar", "hint": "Time" },
-  { "answer": "pineapple", "hint": "Fruit" },
-  { "answer": "telescope", "hint": "Space" },
-  { "answer": "sandwich", "hint": "Food" },
-  { "answer": "umbrella", "hint": "Rain" },
-  { "answer": "football", "hint": "Sport" },
-  { "answer": "mountain", "hint": "Nature" },
-  { "answer": "backyard", "hint": "Home" },
-  { "answer": "notebook", "hint": "School" },
-  { "answer": "triangle", "hint": "Shape" },
-  { "answer": "strawberry", "hint": "Fruit" },
-  { "answer": "dolphin", "hint": "Animal" },
-  { "answer": "keyboard", "hint": "Technology" },
-  { "answer": "lantern", "hint": "Light" },
-  { "answer": "coconut", "hint": "Fruit" },
-  { "answer": "rainbow", "hint": "Sky" },
-  { "answer": "penguin", "hint": "Animal" },
-  { "answer": "carpet", "hint": "Home" },
-  { "answer": "rocket", "hint": "Space" },
-  { "answer": "lizard", "hint": "Animal" },
-  { "answer": "broccoli", "hint": "Vegetable" },
-  { "answer": "cupboard", "hint": "Furniture" },
-  { "answer": "island", "hint": "Nature" },
-  { "answer": "violin", "hint": "Music" },
-  { "answer": "glacier", "hint": "Nature" },
-  { "answer": "wallet", "hint": "Everyday item" },
-  { "answer": "popcorn", "hint": "Snack" },
-  { "answer": "anchor", "hint": "Sea" },
-  { "answer": "bicycle", "hint": "Transport" },
-  { "answer": "chicken", "hint": "Animal" },
-  { "answer": "pyramid", "hint": "Landmark" },
-  { "answer": "blanket", "hint": "Home" },
-  { "answer": "octopus", "hint": "Sea animal" },
-  { "answer": "microwave", "hint": "Kitchen" },
-  { "answer": "sunshine", "hint": "Weather" },
-  { "answer": "painting", "hint": "Art" },
-  { "answer": "jacket", "hint": "Clothing" },
-  { "answer": "monster", "hint": "Fantasy" },
-  { "answer": "firework", "hint": "Celebration" },
-  { "answer": "peacock", "hint": "Bird" },
-  { "answer": "hospital", "hint": "Place" },
-  { "answer": "shoelace", "hint": "Clothing" },
-  { "answer": "waterfall", "hint": "Nature" }
+  {
+    "answer": "cactus",
+    "hint": "Spiky desert plant"
+  },
+  {
+    "answer": "beehive",
+    "hint": "Home of bees"
+  },
+  {
+    "answer": "icehouse",
+    "hint": "Snow shelter"
+  },
+  {
+    "answer": "printer",
+    "hint": "Prints paper"
+  },
+  {
+    "answer": "magnet",
+    "hint": "Attracts metal"
+  },
+  {
+    "answer": "chimney",
+    "hint": "Smoke outlet"
+  },
+  {
+    "answer": "cheese",
+    "hint": "Dairy food"
+  },
+  {
+    "answer": "sweeper",
+    "hint": "Cleaning tool"
+  },
+  {
+    "answer": "peanut",
+    "hint": "Small nut"
+  },
+  {
+    "answer": "bathtub",
+    "hint": "Bath container"
+  },
+  {
+    "answer": "seagull",
+    "hint": "Sea bird"
+  },
+  {
+    "answer": "trophy",
+    "hint": "Prize cup"
+  },
+  {
+    "answer": "boomerang",
+    "hint": "Returns thrown"
+  },
+  {
+    "answer": "windchime",
+    "hint": "Wind sound"
+  },
+  {
+    "answer": "sunscreen",
+    "hint": "Sun protection"
+  },
+  {
+    "answer": "carousel",
+    "hint": "Spinning ride"
+  },
+  {
+    "answer": "tornado",
+    "hint": "Wind storm"
+  },
+  {
+    "answer": "satellite",
+    "hint": "Orbits earth"
+  },
+  {
+    "answer": "stapler",
+    "hint": "Joins paper"
+  },
+  {
+    "answer": "notepad",
+    "hint": "Writing pad"
+  },
+  {
+    "answer": "popsicle",
+    "hint": "Frozen snack"
+  },
+  {
+    "answer": "postcard",
+    "hint": "Travel mail"
+  },
+  {
+    "answer": "snowboots",
+    "hint": "Snow shoes"
+  },
+  {
+    "answer": "gloves",
+    "hint": "Hand wear"
+  },
+  {
+    "answer": "megaphone",
+    "hint": "Loud voice"
+  },
+  {
+    "answer": "binocular",
+    "hint": "See far"
+  },
+  {
+    "answer": "lifeguard",
+    "hint": "Beach safety"
+  },
+  {
+    "answer": "treetop",
+    "hint": "Top of tree"
+  },
+  {
+    "answer": "bedframe",
+    "hint": "Bed support"
+  },
+  {
+    "answer": "dishrack",
+    "hint": "Dry dishes"
+  },
+  {
+    "answer": "bookmark",
+    "hint": "Page marker"
+  },
+  {
+    "answer": "paperclip",
+    "hint": "Paper holder"
+  },
+  {
+    "answer": "chalkboard",
+    "hint": "Chalk board"
+  },
+  {
+    "answer": "clipboard",
+    "hint": "Paper board"
+  },
+  {
+    "answer": "dishwasher",
+    "hint": "Cleans dishes"
+  },
+  {
+    "answer": "jetpack",
+    "hint": "Back rocket"
+  },
+  {
+    "answer": "parachute",
+    "hint": "Slow fall"
+  },
+  {
+    "answer": "sandpaper",
+    "hint": "Smooth tool"
+  },
+  {
+    "answer": "toolbelt",
+    "hint": "Tool holder"
+  },
+  {
+    "answer": "streetlamp",
+    "hint": "Road light"
+  },
+  {
+    "answer": "handcart",
+    "hint": "Push cart"
+  },
+  {
+    "answer": "stoplight",
+    "hint": "Traffic signal"
+  },
+  {
+    "answer": "turntable",
+    "hint": "Record player"
+  },
+  {
+    "answer": "cassette",
+    "hint": "Tape media"
+  },
+  {
+    "answer": "videotape",
+    "hint": "Old video"
+  },
+  {
+    "answer": "controller",
+    "hint": "Game device"
+  },
+  {
+    "answer": "joystick",
+    "hint": "Game control"
+  },
+  {
+    "answer": "gamepad",
+    "hint": "Gaming control"
+  },
+  {
+    "answer": "handheld",
+    "hint": "Portable device"
+  },
+  {
+    "answer": "smartwatch",
+    "hint": "Wrist device"
+  },
+  {
+    "answer": "earbuds",
+    "hint": "Small audio"
+  },
+  {
+    "answer": "bluetooth",
+    "hint": "Wireless tech"
+  },
+  {
+    "answer": "router",
+    "hint": "Network device"
+  },
+  {
+    "answer": "netlink",
+    "hint": "Connects network devices"
+  },
+  {
+    "answer": "database",
+    "hint": "Data system"
+  },
+  {
+    "answer": "software",
+    "hint": "Computer program"
+  },
+  {
+    "answer": "touchpad",
+    "hint": "Laptop mouse"
+  },
+  {
+    "answer": "trackball",
+    "hint": "Rolling mouse"
+  },
+  {
+    "answer": "monitor",
+    "hint": "Display screen"
+  },
+  {
+    "answer": "webcamera",
+    "hint": "Video cam"
+  },
+  {
+    "answer": "microchip",
+    "hint": "Tiny circuit"
+  },
+  {
+    "answer": "server",
+    "hint": "Network computer"
+  },
+  {
+    "answer": "liftoff",
+    "hint": "Rocket start"
+  },
+  {
+    "answer": "handbrake",
+    "hint": "Car stop"
+  },
+  {
+    "answer": "pinwheel",
+    "hint": "Spinning toy"
+  },
+  {
+    "answer": "footrest",
+    "hint": "Rest feet"
+  },
+  {
+    "answer": "handrail",
+    "hint": "Stair support"
+  },
+  {
+    "answer": "gearbox",
+    "hint": "Car gears"
+  },
+  {
+    "answer": "windbreaker",
+    "hint": "Light jacket"
+  },
+  {
+    "answer": "liftover",
+    "hint": "Bridge crossing"
+  },
+  {
+    "answer": "rockslide",
+    "hint": "Falling rocks"
+  },
+  {
+    "answer": "waterwheel",
+    "hint": "Water power"
+  },
+  {
+    "answer": "coastline",
+    "hint": "Land meets sea"
+  },
+  {
+    "answer": "riverbank",
+    "hint": "River edge"
+  },
+  {
+    "answer": "footbridge",
+    "hint": "Walk bridge"
+  },
+  {
+    "answer": "lunchbox",
+    "hint": "Food container"
+  },
+  {
+    "answer": "toolcase",
+    "hint": "Tool case"
+  },
+  {
+    "answer": "backlight",
+    "hint": "Screen light"
+  },
+  {
+    "answer": "headrest",
+    "hint": "Seat support"
+  },
+  {
+    "answer": "bookseller",
+    "hint": "Sells books"
+  },
+  {
+    "answer": "milkcrate",
+    "hint": "Plastic crate"
+  },
+  {
+    "answer": "roadblock",
+    "hint": "Closed road"
+  },
+  {
+    "answer": "doorframe",
+    "hint": "Door border"
+  },
+  {
+    "answer": "firewood",
+    "hint": "Burn logs"
+  },
+  {
+    "answer": "handmirror",
+    "hint": "Small mirror"
+  },
+  {
+    "answer": "armchair",
+    "hint": "Comfort seat"
+  },
+  {
+    "answer": "footpath",
+    "hint": "Walking path"
+  },
+  {
+    "answer": "lifeline",
+    "hint": "Safety rope"
+  },
+  {
+    "answer": "roadwork",
+    "hint": "Road repair"
+  },
+  {
+    "answer": "backrest",
+    "hint": "Chair support"
+  },
+  {
+    "answer": "footboard",
+    "hint": "Bed end"
+  },
+  {
+    "answer": "driftwood",
+    "hint": "Wood from shore"
+  },
+  {
+    "answer": "passport",
+    "hint": "Travel document"
+  },
+  {
+    "answer": "teahouse",
+    "hint": "Place serving tea"
+  },
+  {
+    "answer": "gatepost",
+    "hint": "Post by a gate"
+  },
+  {
+    "answer": "diamond",
+    "hint": "Hard precious gem"
+  },
+  {
+    "answer": "washbowl",
+    "hint": "Basin for washing"
+  },
+  {
+    "answer": "pinewood",
+    "hint": "Wood from pines"
+  },
+  {
+    "answer": "saucepan",
+    "hint": "Deep cooking pan"
+  },
+  {
+    "answer": "seatbelt",
+    "hint": "Safety strap in car"
+  },
+  {
+    "answer": "windowsill",
+    "hint": "Ledge below window"
+  },
+  {
+    "answer": "leafpile",
+    "hint": "Heap of fallen leaves"
+  },
+  {
+    "answer": "claypot",
+    "hint": "Pot made of clay"
+  },
+  {
+    "answer": "tailpipe",
+    "hint": "Exhaust tube"
+  },
+  {
+    "answer": "bluebird",
+    "hint": "Small blue songbird"
+  },
+  {
+    "answer": "daylight",
+    "hint": "Natural light by day"
+  },
+  {
+    "answer": "sunroom",
+    "hint": "Bright room with windows"
+  },
+  {
+    "answer": "orchard",
+    "hint": "Fruit tree garden"
+  },
+  {
+    "answer": "lakeside",
+    "hint": "Area beside a lake"
+  },
+  {
+    "answer": "underpass",
+    "hint": "Roadway below another"
+  },
+  {
+    "answer": "topazgem",
+    "hint": "Yellow gemstone"
+  },
+  {
+    "answer": "gearshift",
+    "hint": "Changes car gears"
+  },
+  {
+    "answer": "wildflower",
+    "hint": "Flower growing naturally"
+  },
+  {
+    "answer": "overpass",
+    "hint": "Bridge above road"
+  },
+  {
+    "answer": "inkstand",
+    "hint": "Holder for ink"
+  },
+  {
+    "answer": "sandbar",
+    "hint": "Raised sand in water"
+  },
+  {
+    "answer": "thunder",
+    "hint": "Loud storm sound"
+  },
+  {
+    "answer": "hilltop",
+    "hint": "Top of a hill"
+  },
+  {
+    "answer": "songbird",
+    "hint": "Bird known for singing"
+  },
+  {
+    "answer": "blizzard",
+    "hint": "Severe snow storm"
+  },
+  {
+    "answer": "woodland",
+    "hint": "Area with many trees"
+  },
+  {
+    "answer": "envelope",
+    "hint": "Paper mail cover"
+  },
+  {
+    "answer": "farmstead",
+    "hint": "Farm and buildings"
+  },
+  {
+    "answer": "sunburst",
+    "hint": "Rays spreading outward"
+  },
+  {
+    "answer": "backseat",
+    "hint": "Rear seat in car"
+  },
+  {
+    "answer": "airship",
+    "hint": "Lighter-than-air craft"
+  },
+  {
+    "answer": "seashore",
+    "hint": "Edge of the sea"
+  },
+  {
+    "answer": "postbox",
+    "hint": "Box for outgoing mail"
+  },
+  {
+    "answer": "rainboot",
+    "hint": "Boot for wet weather"
+  },
+  {
+    "answer": "sanddune",
+    "hint": "Hill of desert sand"
+  },
+  {
+    "answer": "riverbed",
+    "hint": "Bottom of a river"
+  },
+  {
+    "answer": "doormat",
+    "hint": "Mat at doorway"
+  },
+  {
+    "answer": "northwind",
+    "hint": "Cold wind from north"
+  },
+  {
+    "answer": "seadrift",
+    "hint": "Floating sea foam"
+  },
+  {
+    "answer": "hairbrush",
+    "hint": "Brush for hair"
+  },
+  {
+    "answer": "ticketing",
+    "hint": "Process of issuing tickets"
+  },
+  {
+    "answer": "duststorm",
+    "hint": "Storm of dust"
+  },
+  {
+    "answer": "gemstone",
+    "hint": "Cut precious mineral"
+  },
+  {
+    "answer": "handsoap",
+    "hint": "Soap for washing hands"
+  },
+  {
+    "answer": "leafbud",
+    "hint": "New leaf growth"
+  },
+  {
+    "answer": "seaport",
+    "hint": "Harbor for ships"
+  },
+  {
+    "answer": "seaplane",
+    "hint": "Plane that lands on water"
+  },
+  {
+    "answer": "sunpath",
+    "hint": "Path of the sun"
+  },
+  {
+    "answer": "harvest",
+    "hint": "Season of crop gathering"
+  },
+  {
+    "answer": "pajamas",
+    "hint": "Clothes for sleeping"
+  },
+  {
+    "answer": "sapphire",
+    "hint": "Blue precious stone"
+  },
+  {
+    "answer": "stonewall",
+    "hint": "Wall made of stones"
+  },
+  {
+    "answer": "doorstep",
+    "hint": "Step at entrance"
+  },
+  {
+    "answer": "runway",
+    "hint": "Strip for plane takeoff"
+  },
+  {
+    "answer": "cookware",
+    "hint": "Pots and pans"
+  },
+  {
+    "answer": "bathmat",
+    "hint": "Mat near bathtub"
+  },
+  {
+    "answer": "mouthwash",
+    "hint": "Liquid for oral rinse"
+  },
+  {
+    "answer": "highway",
+    "hint": "Major fast road"
+  },
+  {
+    "answer": "sunblock",
+    "hint": "Skin protection lotion"
+  },
+  {
+    "answer": "brooklet",
+    "hint": "Small flowing stream"
+  },
+  {
+    "answer": "silverware",
+    "hint": "Knives forks spoons"
+  },
+  {
+    "answer": "tabletop",
+    "hint": "Upper surface of table"
+  },
+  {
+    "answer": "pebble",
+    "hint": "Small smooth stone"
+  },
+  {
+    "answer": "steering",
+    "hint": "Controlling vehicle direction"
+  },
+  {
+    "answer": "trailhead",
+    "hint": "Start of hiking trail"
+  },
+  {
+    "answer": "ovenware",
+    "hint": "Dishes used in oven"
+  },
+  {
+    "answer": "windlass",
+    "hint": "Crank lifting mechanism"
+  },
+  {
+    "answer": "lightning",
+    "hint": "Electric flash in storm"
+  },
+  {
+    "answer": "bedsheet",
+    "hint": "Cloth covering mattress"
+  },
+  {
+    "answer": "emerald",
+    "hint": "Green precious gem"
+  },
+  {
+    "answer": "moonset",
+    "hint": "Moon going below horizon"
+  },
+  {
+    "answer": "skylight",
+    "hint": "Window in roof"
+  },
+  {
+    "answer": "yardwork",
+    "hint": "Outdoor home chores"
+  },
+  {
+    "answer": "dewdrop",
+    "hint": "Tiny drop at dawn"
+  }
 ]

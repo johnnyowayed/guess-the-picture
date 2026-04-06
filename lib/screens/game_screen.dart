@@ -1070,7 +1070,7 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
                           builder: (context, constraints) {
                             final width = constraints.maxWidth;
                             final answerLength = _answerSlots.length;
-                            final wordSpacing = width < 380 ? 4.0 : 6.0;
+                            final wordSpacing = width < 380 ? 7.0 : 10.0;
                             final wordSize = min(
                               width < 380 ? 28.0 : 32.0,
                               (width - 48 - (answerLength - 1) * wordSpacing) / answerLength,
