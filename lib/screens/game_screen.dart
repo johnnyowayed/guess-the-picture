@@ -48,8 +48,13 @@ class _GameScreenState extends State<GameScreen>
   _TutorialType? _activeTutorial;
   int _tutorialStepIndex = 0;
   int? _tutorialReplayReturnLevelId;
+  bool _isTutorialReplayActive = false;
   bool _isImageReadyForTutorial = false;
   late final AnimationController _tutorialPulseController;
+  final DateTime _sessionStartedAt = DateTime.now();
+  int _sessionCompletedLevels = 0;
+  int _sessionHelpersUsed = 0;
+  bool _sessionSummaryLogged = false;
 
   List<_LetterTileData> _letterTiles = [];
   List<_SelectedLetter?> _answerSlots = [];
@@ -66,12 +71,59 @@ class _GameScreenState extends State<GameScreen>
 
   @override
   void dispose() {
+    _logSessionSummaryIfNeeded();
     _tutorialPulseController.dispose();
     super.dispose();
   }
 
   String _normalizeAnswer(String input) {
     return input.toLowerCase().trim().replaceAll(RegExp(r'[_\-\s]'), '');
+  }
+
+  void _trackLevelStarted(LevelModel level, {required bool fromReplay}) {
+    unawaited(
+      TelemetryService.instance.logLevelStarted(
+        level: level.id,
+        isScramble: level.isScramble,
+        fromReplay: fromReplay,
+      ),
+    );
+    unawaited(
+      TelemetryService.instance.setPreferredMode(
+        mode: level.isScramble ? 'scramble' : 'image',
+      ),
+    );
+    if (!fromReplay && level.id == 1) {
+      unawaited(
+        TelemetryService.instance.logFirstLevelAttemptedIfNeeded(
+          level: level.id,
+        ),
+      );
+    }
+  }
+
+  String _sessionLengthBucket(Duration duration) {
+    final minutes = duration.inMinutes;
+    if (minutes < 2) return 'under_2m';
+    if (minutes < 10) return '2_to_10m';
+    if (minutes < 30) return '10_to_30m';
+    return '30m_plus';
+  }
+
+  void _logSessionSummaryIfNeeded() {
+    if (_sessionSummaryLogged) {
+      return;
+    }
+
+    _sessionSummaryLogged = true;
+    final duration = DateTime.now().difference(_sessionStartedAt);
+    unawaited(
+      TelemetryService.instance.logSessionEndSummary(
+        levelsCompletedInSession: _sessionCompletedLevels,
+        helpersUsedInSession: _sessionHelpersUsed,
+        sessionLengthBucket: _sessionLengthBucket(duration),
+      ),
+    );
   }
 
   Future<void> _loadGame() async {
@@ -100,13 +152,7 @@ class _GameScreenState extends State<GameScreen>
         _isTutorialPending = shouldHoldForTutorial;
         _isLoading = false;
       });
-      unawaited(
-        TelemetryService.instance.logLevelStarted(
-          level: current.id,
-          isScramble: current.isScramble,
-          fromReplay: false,
-        ),
-      );
+      _trackLevelStarted(current, fromReplay: false);
       _scheduleTutorialCheck(current);
     } catch (e) {
       if (!mounted) return;
@@ -322,18 +368,40 @@ class _GameScreenState extends State<GameScreen>
         isScramble: _currentLevel!.isScramble,
       ),
     );
+    _sessionHelpersUsed += 1;
   }
 
   Future<void> _useRewardedAction({
     required VoidCallback onRewarded,
     required String actionName,
   }) async {
+    unawaited(
+      TelemetryService.instance.logRewardedAdRequested(actionName: actionName),
+    );
     final didEarnReward = await AdService.instance.showRewardedAd(
       onRewarded: () {
+        unawaited(
+          TelemetryService.instance.logRewardedAdRewarded(
+            actionName: actionName,
+          ),
+        );
         unawaited(FeedbackService.instance.powerup());
         onRewarded();
       },
     );
+
+    if (didEarnReward) {
+      unawaited(
+        TelemetryService.instance.logRewardedAdShown(actionName: actionName),
+      );
+    } else {
+      unawaited(
+        TelemetryService.instance.logRewardedAdFailed(
+          actionName: actionName,
+          reason: 'not_ready',
+        ),
+      );
+    }
 
     if (!mounted || didEarnReward) {
       return;
@@ -396,6 +464,7 @@ class _GameScreenState extends State<GameScreen>
         isScramble: _currentLevel!.isScramble,
       ),
     );
+    _sessionHelpersUsed += 1;
 
     if (_isAnswerComplete) {
       unawaited(_submitAnswer());
@@ -418,6 +487,12 @@ class _GameScreenState extends State<GameScreen>
         TelemetryService.instance.logLevelCompleted(
           level: level.id,
           isScramble: level.isScramble,
+        ),
+      );
+      _sessionCompletedLevels += 1;
+      unawaited(
+        TelemetryService.instance.logLevelMilestoneReachedIfNeeded(
+          milestone: level.id,
         ),
       );
       await FeedbackService.instance.success();
@@ -496,13 +571,7 @@ class _GameScreenState extends State<GameScreen>
       _isTutorialPending = shouldHoldForTutorial;
       _isChecking = false;
     });
-    unawaited(
-      TelemetryService.instance.logLevelStarted(
-        level: nextLevel.id,
-        isScramble: nextLevel.isScramble,
-        fromReplay: false,
-      ),
-    );
+    _trackLevelStarted(nextLevel, fromReplay: false);
     _scheduleTutorialCheck(nextLevel);
   }
 
@@ -562,6 +631,12 @@ class _GameScreenState extends State<GameScreen>
         _tutorialStepIndex = 0;
         _isTutorialPending = false;
       });
+      unawaited(
+        TelemetryService.instance.logTutorialStarted(
+          tutorialType: 'scramble',
+          isReplay: false,
+        ),
+      );
       _refreshTutorialOverlayFrames();
       return;
     }
@@ -593,6 +668,12 @@ class _GameScreenState extends State<GameScreen>
       _tutorialStepIndex = 0;
       _isTutorialPending = false;
     });
+    unawaited(
+      TelemetryService.instance.logTutorialStarted(
+        tutorialType: 'image',
+        isReplay: false,
+      ),
+    );
     _refreshTutorialOverlayFrames();
   }
 
@@ -805,6 +886,7 @@ class _GameScreenState extends State<GameScreen>
       _tutorialReplayReturnLevelId = current.id == targetLevel.id
           ? null
           : current.id;
+      _isTutorialReplayActive = true;
       _currentLevel = targetLevel;
       _currentLevelNumber = targetLevel.id;
       _prepareLevel(targetLevel);
@@ -813,27 +895,32 @@ class _GameScreenState extends State<GameScreen>
       _tutorialStepIndex = 0;
     });
     unawaited(
+      TelemetryService.instance.logTutorialStarted(
+        tutorialType: type == _TutorialType.image ? 'image' : 'scramble',
+        isReplay: true,
+      ),
+    );
+    unawaited(
       TelemetryService.instance.logTutorialReplay(
         tutorialType: type == _TutorialType.image ? 'image' : 'scramble',
       ),
     );
-    unawaited(
-      TelemetryService.instance.logLevelStarted(
-        level: targetLevel.id,
-        isScramble: targetLevel.isScramble,
-        fromReplay: true,
-      ),
-    );
+    _trackLevelStarted(targetLevel, fromReplay: true);
     _refreshTutorialOverlayFrames();
   }
 
   Future<void> _dismissTutorial() async {
     final tutorial = _activeTutorial;
     if (tutorial == null) return;
+    final tutorialType = tutorial == _TutorialType.image ? 'image' : 'scramble';
+    final isReplay = _isTutorialReplayActive;
+    final didComplete = _tutorialStepIndex >= _tutorialSteps.length - 1;
+    final stepIndex = _tutorialStepIndex;
 
     setState(() {
       _activeTutorial = null;
       _tutorialStepIndex = 0;
+      _isTutorialReplayActive = false;
     });
 
     if (tutorial == _TutorialType.image) {
@@ -842,11 +929,28 @@ class _GameScreenState extends State<GameScreen>
       await _progressService.markScrambleTutorialSeen();
     }
 
+    if (didComplete) {
+      unawaited(
+        TelemetryService.instance.logTutorialCompleted(
+          tutorialType: tutorialType,
+          isReplay: isReplay,
+        ),
+      );
+    } else {
+      unawaited(
+        TelemetryService.instance.logTutorialSkipped(
+          tutorialType: tutorialType,
+          isReplay: isReplay,
+          stepIndex: stepIndex,
+        ),
+      );
+    }
+
     await _restoreTutorialReplayLevelIfNeeded();
   }
 
   Future<void> _exitTutorialReplay() async {
-    if (_tutorialReplayReturnLevelId == null) {
+    if (!_isTutorialReplayActive) {
       return;
     }
 
@@ -854,7 +958,7 @@ class _GameScreenState extends State<GameScreen>
   }
 
   Future<void> _completeGuidedTutorialSolve() async {
-    if (_tutorialReplayReturnLevelId != null) {
+    if (_isTutorialReplayActive) {
       await FeedbackService.instance.success();
       if (!mounted) return;
       await Future<void>.delayed(const Duration(milliseconds: 500));
@@ -875,6 +979,12 @@ class _GameScreenState extends State<GameScreen>
     } else {
       await _progressService.markScrambleTutorialSeen();
     }
+    unawaited(
+      TelemetryService.instance.logTutorialCompleted(
+        tutorialType: tutorial == _TutorialType.image ? 'image' : 'scramble',
+        isReplay: false,
+      ),
+    );
 
     if (!mounted) return;
     await FeedbackService.instance.success();
@@ -923,6 +1033,7 @@ class _GameScreenState extends State<GameScreen>
         isScramble: level.isScramble,
       ),
     );
+    _sessionHelpersUsed += 1;
   }
 
   Future<void> _showSettingsDialog() async {
@@ -983,6 +1094,11 @@ class _GameScreenState extends State<GameScreen>
                       value: soundEnabled,
                       onChanged: (value) async {
                         await FeedbackService.instance.setSoundEnabled(value);
+                        unawaited(
+                          TelemetryService.instance.setSoundEnabledUserProperty(
+                            enabled: value,
+                          ),
+                        );
                         soundEnabled = value;
                         setModalState(() {});
                         if (value) {
@@ -1220,7 +1336,7 @@ class _GameScreenState extends State<GameScreen>
               title: tutorialTitle,
               body: tutorialBody,
             ),
-          if (_tutorialReplayReturnLevelId != null)
+          if (_isTutorialReplayActive)
             Positioned(
               top: 12,
               right: 12,

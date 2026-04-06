@@ -36,6 +36,9 @@ void main() async {
   };
 
   await FeedbackService.instance.initialize();
+  await TelemetryService.instance.setSoundEnabledUserProperty(
+    enabled: FeedbackService.instance.soundEnabled,
+  );
   await AdService.instance.initialize();
 
   runApp(const GuessImageApp());
