@@ -926,7 +926,7 @@ class _GameScreenState extends State<GameScreen>
   }
 
   Future<void> _showSettingsDialog() async {
-    await FeedbackService.instance.tap();
+    unawaited(FeedbackService.instance.tap());
     unawaited(TelemetryService.instance.logSettingsOpened());
     if (!mounted) return;
 
@@ -986,7 +986,7 @@ class _GameScreenState extends State<GameScreen>
                         soundEnabled = value;
                         setModalState(() {});
                         if (value) {
-                          await FeedbackService.instance.tap();
+                          unawaited(FeedbackService.instance.tap());
                         }
                       },
                     ),
@@ -1002,7 +1002,7 @@ class _GameScreenState extends State<GameScreen>
                         vibrationEnabled = value;
                         setModalState(() {});
                         if (value) {
-                          await FeedbackService.instance.tap();
+                          unawaited(FeedbackService.instance.tap());
                         }
                       },
                     ),
@@ -1496,8 +1496,8 @@ class _GameScreenState extends State<GameScreen>
           child: OutlinedButton(
             onPressed: isDisabledByTutorial
                 ? null
-                : () async {
-                    await FeedbackService.instance.tap();
+                : () {
+                    unawaited(FeedbackService.instance.tap());
                     onPressed();
                   },
             style: OutlinedButton.styleFrom(
